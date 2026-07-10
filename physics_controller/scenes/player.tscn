@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://clwcdbh65ghih"]
+
+[ext_resource type="Script" uid="uid://ba3uvix4yb1ce" path="res://addons/physics_controller/src/player.gd" id="1_dd0ac"]
+[ext_resource type="Script" uid="uid://b6pbpjrbknaes" path="res://addons/physics_controller/src/ground_finder.gd" id="2_0u5uq"]
+[ext_resource type="Script" uid="uid://d1buoyjmbjy0v" path="res://addons/physics_controller/src/camera_controller.gd" id="2_jlvik"]
+[ext_resource type="Script" uid="uid://dtohg0avuy7jk" path="res://addons/physics_controller/src/camera_effects.gd" id="3_74mp2"]
+[ext_resource type="Script" uid="uid://r8hhk040saol" path="res://Scripts/Player/Components/mouse_capture.gd" id="3_gk6dx"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_jlvik"]
+[ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="4_gk6dx"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="5_74mp2"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="5_jhyir"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="6_74mp2"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="9_gk6dx"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jhyir"]
+friction = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_jhyir"]
+height = 1.0
+
+[sub_resource type="Curve" id="Curve_74mp2"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.28621292, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_oikmp"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.6684119, 0.3563218), 1.2174509, 1.2174509, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_06tpx"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7g0yx"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.50418764, 0.90443873), 0.46110696, 0.46110696, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_oikmp"]
+height = 0.5
+
+[node name="Player" type="RigidBody3D" unique_id=1842528684 node_paths=PackedStringArray("ground_finder", "state_chart", "camera_effects")]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+mass = 100.0
+physics_material_override = SubResource("PhysicsMaterial_jhyir")
+gravity_scale = 0.0
+script = ExtResource("1_dd0ac")
+ground_finder = NodePath("GroundFinder")
+state_chart = NodePath("StateChart")
+camera_effects = NodePath("CameraController/Camera3D")
+ride_spring_strength = 400.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1828131569]
+shape = SubResource("CylinderShape3D_jhyir")
+
+[node name="CameraController" type="Node3D" parent="." unique_id=337294856 node_paths=PackedStringArray("player_controller", "component_mouse_capture")]
+script = ExtResource("2_jlvik")
+player_controller = NodePath("..")
+component_mouse_capture = NodePath("../Components/MouseCaptureComponent")
+
+[node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1900071529 node_paths=PackedStringArray("player")]
+script = ExtResource("3_74mp2")
+player = NodePath("../..")
+fall_kick_time_curve = SubResource("Curve_74mp2")
+fall_kick_velocity_curve = SubResource("Curve_oikmp")
+max_fall_kick_angle = 10.0
+bob_frequency_max = 1.5
+bob_speed_amplitude_curve = SubResource("Curve_06tpx")
+bob_speed_frequency_curve = SubResource("Curve_7g0yx")
+
+[node name="Components" type="Node" parent="." unique_id=1360865520]
+
+[node name="MouseCaptureComponent" type="Node" parent="Components" unique_id=2076847307]
+script = ExtResource("3_gk6dx")
+metadata/_custom_type_script = "uid://r8hhk040saol"
+
+[node name="GroundFinder" type="Node3D" parent="." unique_id=678272652 node_paths=PackedStringArray("shape_cast", "ray_cast", "player_controller")]
+script = ExtResource("2_0u5uq")
+shape_cast = NodePath("ShapeCast3D")
+ray_cast = NodePath("RayCast3D")
+player_controller = NodePath("..")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="GroundFinder" unique_id=855392629]
+shape = SubResource("CylinderShape3D_oikmp")
+target_position = Vector3(0, -2.5, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="GroundFinder" unique_id=1013811223]
+target_position = Vector3(0, -2.5, 0)
+
+[node name="StateChartDebugger" parent="." unique_id=1332050794 instance=ExtResource("5_74mp2")]
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 0.5
+initial_node_to_watch = NodePath("../StateChart")
+
+[node name="StateChart" type="Node" parent="." unique_id=956697618]
+script = ExtResource("3_jlvik")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart" unique_id=509538941]
+script = ExtResource("4_gk6dx")
+
+[node name="Movement" type="Node" parent="StateChart/Root" unique_id=810486572]
+script = ExtResource("5_jhyir")
+initial_state = NodePath("Airborne")
+
+[node name="Airborne" type="Node" parent="StateChart/Root/Movement" unique_id=941635362]
+script = ExtResource("6_74mp2")
+
+[node name="OnGrounded" type="Node" parent="StateChart/Root/Movement/Airborne" unique_id=2038918222]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Grounded")
+event = &"onGrounded"
+delay_in_seconds = "0.0"
+
+[node name="Jumping" type="Node" parent="StateChart/Root/Movement" unique_id=1134567987]
+script = ExtResource("6_74mp2")
+
+[node name="OnAirborne" type="Node" parent="StateChart/Root/Movement/Jumping" unique_id=1198618469]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Airborne")
+event = &"onAirborne"
+delay_in_seconds = "0.0"
+
+[node name="Grounded" type="Node" parent="StateChart/Root/Movement" unique_id=1626672795]
+script = ExtResource("6_74mp2")
+
+[node name="OnCoyote" type="Node" parent="StateChart/Root/Movement/Grounded" unique_id=1600480625]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Coyote")
+event = &"onCoyote"
+delay_in_seconds = "0.0"
+
+[node name="OnJump" type="Node" parent="StateChart/Root/Movement/Grounded" unique_id=170340321]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Jumping")
+event = &"onJump"
+delay_in_seconds = "0.0"
+
+[node name="Coyote" type="Node" parent="StateChart/Root/Movement" unique_id=475240734]
+script = ExtResource("6_74mp2")
+
+[node name="OnAirborne" type="Node" parent="StateChart/Root/Movement/Coyote" unique_id=1214211020]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Airborne")
+event = &"onAirborne"
+delay_in_seconds = "0.0"
+
+[node name="OnGrounded" type="Node" parent="StateChart/Root/Movement/Coyote" unique_id=349482535]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Grounded")
+event = &"onGrounded"
+delay_in_seconds = "0.0"
+
+[node name="OnJump" type="Node" parent="StateChart/Root/Movement/Coyote" unique_id=368582000]
+script = ExtResource("9_gk6dx")
+to = NodePath("../../Jumping")
+event = &"onJump"
+delay_in_seconds = "0.0"
+
+[connection signal="state_entered" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Jumping" to="." method="_on_jumping_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Jumping" to="." method="_any_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Jumping" to="." method="_on_jumping_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Coyote" to="." method="_on_coyote_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Movement/Coyote" to="." method="_any_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Movement/Coyote" to="." method="_on_coyote_state_physics_processing"]
