@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://clwcdbh65ghih"]
 
-[ext_resource type="Script" uid="uid://ba3uvix4yb1ce" path="res://addons/physics_controller/src/player.gd" id="1_dd0ac"]
-[ext_resource type="Script" uid="uid://b6pbpjrbknaes" path="res://addons/physics_controller/src/ground_finder.gd" id="2_0u5uq"]
-[ext_resource type="Script" uid="uid://d1buoyjmbjy0v" path="res://addons/physics_controller/src/camera_controller.gd" id="2_jlvik"]
-[ext_resource type="Script" uid="uid://dtohg0avuy7jk" path="res://addons/physics_controller/src/camera_effects.gd" id="3_74mp2"]
-[ext_resource type="Script" uid="uid://r8hhk040saol" path="res://Scripts/Player/Components/mouse_capture.gd" id="3_gk6dx"]
+[ext_resource type="Script" uid="uid://bfml2mgvgdwli" path="res://addons/physics_controller/src/player.gd" id="1_dd0ac"]
+[ext_resource type="Script" uid="uid://k7p0124wbqrc" path="res://addons/physics_controller/src/ground_finder.gd" id="2_0u5uq"]
+[ext_resource type="Script" uid="uid://b3ibh1nnsvfxv" path="res://addons/physics_controller/src/camera_controller.gd" id="2_jlvik"]
+[ext_resource type="Script" uid="uid://b60g76h3kbi4l" path="res://addons/physics_controller/src/camera_effects.gd" id="3_74mp2"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_jlvik"]
+[ext_resource type="Script" uid="uid://dt7iry7n6i064" path="res://addons/physics_controller/src/mouse_capture.gd" id="4_7qswf"]
 [ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="4_gk6dx"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="5_74mp2"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="5_jhyir"]
@@ -71,8 +71,7 @@ bob_speed_frequency_curve = SubResource("Curve_7g0yx")
 [node name="Components" type="Node" parent="." unique_id=1360865520]
 
 [node name="MouseCaptureComponent" type="Node" parent="Components" unique_id=2076847307]
-script = ExtResource("3_gk6dx")
-metadata/_custom_type_script = "uid://r8hhk040saol"
+script = ExtResource("4_7qswf")
 
 [node name="GroundFinder" type="Node3D" parent="." unique_id=678272652 node_paths=PackedStringArray("shape_cast", "ray_cast", "player_controller")]
 script = ExtResource("2_0u5uq")

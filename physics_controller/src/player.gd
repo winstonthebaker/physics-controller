@@ -136,8 +136,10 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 
 func _on_jumping_state_physics_processing(delta: float) -> void:
 	time_in_state += delta
-	if time_in_state > 0.5 and linear_velocity.y < 0:
+	if time_in_state > 0.25 and linear_velocity.y <= 0:
 		state_chart.send_event("onAirborne")
+	if time_in_state > 0.5:
+		state_chart.send_event("OnAirborne")
 	var force = Vector3.DOWN * gravity * mass
 	force += horizontal_air_movement_force(air_movement_speed, air_movement_acceleration)
 	apply_central_force(force)
