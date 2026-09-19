@@ -1,4 +1,4 @@
 # physics-controller
 Physics based character controller for Godot game engine
 
-Requres the "Godot State Charts" plugin by Jan Thomä & Contributors to function
+Instructions: the "Player" scene in the /scenes/ can be dragged into a project and it should work.

@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://bn4botyb4haxr"]
+
+[ext_resource type="Script" uid="uid://b71nk44wsu6b5" path="res://addons/physics_controller/source/player.gd" id="1_qb6va"]
+[ext_resource type="Script" uid="uid://cmk74mra0x32x" path="res://addons/physics_controller/source/surroundings_analyzer.gd" id="2_jr0eh"]
+[ext_resource type="Script" uid="uid://rhygeup6dk2" path="res://addons/physics_controller/source/camera_controller.gd" id="3_jr0eh"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dxqxf"]
+friction = 0.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6uyy5"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_q2rkc"]
+height = 0.01
+radius = 0.48
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qhqgy"]
+height = 0.01
+radius = 1.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_dxqxf"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3vyb7"]
+properties/0/path = NodePath(".:_raw_input_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:rotation")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qhqgy"]
+
+[node name="Player" type="RigidBody3D" unique_id=1266272198 node_paths=PackedStringArray("collider", "surroundings_analyzer", "camera_controller", "camera")]
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+physics_material_override = SubResource("PhysicsMaterial_dxqxf")
+gravity_scale = 0.0
+script = ExtResource("1_qb6va")
+collider = NodePath("CollisionShape3D")
+collider_shape = SubResource("CylinderShape3D_6uyy5")
+surroundings_analyzer = NodePath("SurroundingsAnalyzer")
+camera_controller = NodePath("CameraController")
+camera = NodePath("CameraController/Camera3D")
+
+[node name="SurroundingsAnalyzer" type="Node3D" parent="." unique_id=150746479 node_paths=PackedStringArray("character", "ceiling_cast", "ground_shapecast", "ledge_shapecast", "wall_raycasts")]
+top_level = true
+script = ExtResource("2_jr0eh")
+character = NodePath("..")
+ceiling_cast = NodePath("CeilingCast")
+ground_shapecast = NodePath("GroundShapeCast")
+ledge_shapecast = NodePath("LedgeShapeCast")
+wall_raycasts = [NodePath("WallRaycastContainer/RayCast3D"), NodePath("WallRaycastContainer/RayCast3D2"), NodePath("WallRaycastContainer/RayCast3D3"), NodePath("WallRaycastContainer/RayCast3D4"), NodePath("WallRaycastContainer/RayCast3D5"), NodePath("WallRaycastContainer/RayCast3D6"), NodePath("WallRaycastContainer/RayCast3D7"), NodePath("WallRaycastContainer/RayCast3D8")]
+
+[node name="CeilingCast" type="ShapeCast3D" parent="SurroundingsAnalyzer" unique_id=44125965]
+shape = SubResource("CylinderShape3D_q2rkc")
+target_position = Vector3(0, 2, 0)
+
+[node name="GroundShapeCast" type="ShapeCast3D" parent="SurroundingsAnalyzer" unique_id=827403510]
+shape = SubResource("CylinderShape3D_q2rkc")
+target_position = Vector3(0, -6, 0)
+
+[node name="GroundRayCast" type="RayCast3D" parent="SurroundingsAnalyzer" unique_id=271975201]
+target_position = Vector3(0, -6, 0)
+
+[node name="LedgeShapeCast" type="ShapeCast3D" parent="SurroundingsAnalyzer" unique_id=781668257]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("CylinderShape3D_qhqgy")
+target_position = Vector3(0, -2.5, 0)
+
+[node name="WallRaycastContainer" type="Node3D" parent="SurroundingsAnalyzer" unique_id=366982137]
+
+[node name="RayCast3D" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=1114397565]
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D2" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=323758567]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D3" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=961737070]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D4" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=500236297]
+transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D5" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=801077552]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D6" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=2055397630]
+transform = Transform3D(-0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071068, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D7" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=384842821]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="RayCast3D8" type="RayCast3D" parent="SurroundingsAnalyzer/WallRaycastContainer" unique_id=637227253]
+transform = Transform3D(0.70710665, 0, -0.7071069, 0, 1, 0, 0.7071069, 0, 0.70710665, 0, 0, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=721585426]
+shape = SubResource("CylinderShape3D_dxqxf")
+
+[node name="CameraController" type="Node3D" parent="." unique_id=897781403]
+script = ExtResource("3_jr0eh")
+
+[node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1216621494]
+
+[node name="ClientSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1695788844]
+replication_config = SubResource("SceneReplicationConfig_3vyb7")
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1569201876]
+root_path = NodePath("../CollisionShape3D")
+replication_config = SubResource("SceneReplicationConfig_qhqgy")
