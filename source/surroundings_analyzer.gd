@@ -115,7 +115,7 @@ func _analyze_walls(delta: float) -> void:
 
 func _analyze_ground(delta: float, walkable_angle: float) -> void:
 	for raycast in ground_raycasts:
-		raycast.force_raycast_update()
+		raycast.force_raycast_update()   
 	ground_shapecast.force_shapecast_update()
 	current_ground = get_highest_walkable_ground(
 		ground_shapecast,
@@ -128,15 +128,17 @@ func _analyze_ground(delta: float, walkable_angle: float) -> void:
 func _analyze_ledge(delta: float, walkable_angle: float) -> void:
 	for raycast in ledge_raycasts:
 		raycast.force_raycast_update()
+
 	ledge_shapecast.force_shapecast_update()
 	
-	current_ledge = get_highest_walkable_ground(
-		ledge_shapecast,
-		ledge_raycasts,
-		object_tracker,
-		delta,
-		walkable_angle
-	)
+	#current_ledge = get_highest_walkable_ground(
+		#ledge_shapecast,
+		#ledge_raycasts,
+		#object_tracker,
+		#delta,
+		#walkable_angle,
+		#true
+	#)
 
 
 static func get_highest_walkable_ground(
@@ -144,7 +146,8 @@ static func get_highest_walkable_ground(
 	raycasts: Array[RayCast3D], 
 	tracker: ObjectTracker, 
 	delta: float,
-	walkable_angle: float
+	walkable_angle: float,
+	is_ledge_check: bool = false
 	) -> CollisionInfo:
 	var ground = CollisionInfo.new(Vector3(0.0, -INF, 0.0))
 
@@ -153,7 +156,6 @@ static func get_highest_walkable_ground(
 	var objects: Array[Object] = []
 	
 	for i in raycasts.size():
-		tracker.record_object_contact(objects[i])
 		var raycast := raycasts[i]
 		if is_instance_valid(raycast) and raycast.is_colliding():
 			points.append(raycast.get_collision_point())
@@ -165,9 +167,10 @@ static func get_highest_walkable_ground(
 			points.append(shapecast.get_collision_point(i))
 			normals.append(shapecast.get_collision_normal(i))
 			objects.append(shapecast.get_collider(i))
-	
+	for i in objects.size():
+		tracker.record_object_contact(objects[i])
 	for i in points.size():
-		if points[i].y > ground.point.y and is_point_walkable(ground.normal, walkable_angle):
+		if points[i].y > ground.point.y and is_point_walkable(normals[i], walkable_angle):
 			ground.is_valid = true
 			ground.point = points[i]
 			ground.normal = normals[i]
@@ -177,4 +180,4 @@ static func get_highest_walkable_ground(
 	return ground
 
 static func is_point_walkable(normal: Vector3, walkable_angle: float) -> bool:
-	return normal.angle_to(Vector3.UP) <= walkable_angle
+	return normal.angle_to(Vector3.UP) <= deg_to_rad(walkable_angle) 

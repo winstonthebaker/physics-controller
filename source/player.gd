@@ -223,11 +223,16 @@ func _grounded_evaluate() -> int:
 		return MovementState.JUMP
 	if not surroundings_analyzer.current_ground.is_valid:
 		return MovementState.COYOTE
+		print_debug("transitioning to coyote because invalid ground")
 	var ground_offset: float = surroundings_analyzer.current_ground.point.y - global_position.y
 	if ground_offset < -GROUND_LOSS_DEPTH:
+		print_debug("transitioning to coyote because ground is too far away")
 		return MovementState.COYOTE
 	var ground_normal = surroundings_analyzer.current_ground.normal
 	if rad_to_deg(ground_normal.angle_to(Vector3.UP)) > WALKABLE_GROUND_SLOPE:
+		var ground_angle := rad_to_deg(ground_normal.angle_to(Vector3.UP)) 
+		
+		print_debug("transitioning to coyote because ground is too steep. Ground angle: " + str(ground_angle))
 		return MovementState.COYOTE
 	return -1
 

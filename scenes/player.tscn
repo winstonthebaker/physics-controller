@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bn4botyb4haxr"]
 
-[ext_resource type="Script" uid="uid://b71nk44wsu6b5" path="res://addons/physics_controller/source/player.gd" id="1_qb6va"]
-[ext_resource type="Script" uid="uid://cmk74mra0x32x" path="res://addons/physics_controller/source/surroundings_analyzer.gd" id="2_jr0eh"]
-[ext_resource type="Script" uid="uid://rhygeup6dk2" path="res://addons/physics_controller/source/camera_controller.gd" id="3_jr0eh"]
+[ext_resource type="Script" uid="uid://b71nk44wsu6b5" path="res://addons/physics-controller/source/player.gd" id="1_qb6va"]
+[ext_resource type="Script" uid="uid://cmk74mra0x32x" path="res://addons/physics-controller/source/surroundings_analyzer.gd" id="2_jr0eh"]
+[ext_resource type="Script" uid="uid://rhygeup6dk2" path="res://addons/physics-controller/source/camera_controller.gd" id="3_jr0eh"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dxqxf"]
 friction = 0.0
@@ -48,12 +48,13 @@ surroundings_analyzer = NodePath("SurroundingsAnalyzer")
 camera_controller = NodePath("CameraController")
 camera = NodePath("CameraController/Camera3D")
 
-[node name="SurroundingsAnalyzer" type="Node3D" parent="." unique_id=150746479 node_paths=PackedStringArray("character", "ceiling_cast", "ground_shapecast", "ledge_shapecast", "wall_raycasts")]
+[node name="SurroundingsAnalyzer" type="Node3D" parent="." unique_id=150746479 node_paths=PackedStringArray("character", "ceiling_cast", "ground_shapecast", "ground_raycasts", "ledge_shapecast", "wall_raycasts")]
 top_level = true
 script = ExtResource("2_jr0eh")
 character = NodePath("..")
 ceiling_cast = NodePath("CeilingCast")
 ground_shapecast = NodePath("GroundShapeCast")
+ground_raycasts = [NodePath("RayCast3D")]
 ledge_shapecast = NodePath("LedgeShapeCast")
 wall_raycasts = [NodePath("WallRaycastContainer/RayCast3D"), NodePath("WallRaycastContainer/RayCast3D2"), NodePath("WallRaycastContainer/RayCast3D3"), NodePath("WallRaycastContainer/RayCast3D4"), NodePath("WallRaycastContainer/RayCast3D5"), NodePath("WallRaycastContainer/RayCast3D6"), NodePath("WallRaycastContainer/RayCast3D7"), NodePath("WallRaycastContainer/RayCast3D8")]
 
@@ -65,13 +66,13 @@ target_position = Vector3(0, 2, 0)
 shape = SubResource("CylinderShape3D_q2rkc")
 target_position = Vector3(0, -6, 0)
 
-[node name="GroundRayCast" type="RayCast3D" parent="SurroundingsAnalyzer" unique_id=271975201]
-target_position = Vector3(0, -6, 0)
-
 [node name="LedgeShapeCast" type="ShapeCast3D" parent="SurroundingsAnalyzer" unique_id=781668257]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("CylinderShape3D_qhqgy")
 target_position = Vector3(0, -2.5, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="SurroundingsAnalyzer" unique_id=2084261883]
+target_position = Vector3(0, -6, 0)
 
 [node name="WallRaycastContainer" type="Node3D" parent="SurroundingsAnalyzer" unique_id=366982137]
 
@@ -120,3 +121,7 @@ replication_config = SubResource("SceneReplicationConfig_3vyb7")
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1569201876]
 root_path = NodePath("../CollisionShape3D")
 replication_config = SubResource("SceneReplicationConfig_qhqgy")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=47123670]
+omni_range = 3.0
+omni_attenuation = 2.097
